@@ -1,0 +1,11 @@
+##########################################################################################
+## Spring Gmail Send
+##########################################################################################
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.protocol=smtp
+spring.mail.default-encoding=UTF-8
+spring.mail.username=qkrgjswjd100@gmail.com
+spring.mail.password=[pw]
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.smtp.auth=true
