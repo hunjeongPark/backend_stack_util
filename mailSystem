@@ -35,8 +35,11 @@ public class EmailController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		SimpleMailMessage msg = new SimpleMailMessage();
 		
+		ArrayList<String> sendToEmail = new ArrayList<String>();
+		sendToEmail.add("hjpark@entropykorea.com");
+		
 		try {
-			msg.setTo("hjpark@entropykorea.com");
+			msg.setTo(sendToEmail.toArray(new String[sendToEmail.size()]));
 			msg.setSubject("테스트");
 			msg.setText("test");
 			result.put("resultCode", 200);
