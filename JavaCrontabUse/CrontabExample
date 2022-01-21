@@ -1,0 +1,20 @@
+//Scheduled Example this Crontab Batch System
+
+@Scheduled(cron="0 */01 * * * ?") //this crontab is repeat 1 minute checking
+@Scheduled(cron="0 */05 * * * ?") //this crontab is repeat 5 minute checking
+
+@Scheduled(cron="00 10 00 * * ?") //this crontab is repeat every days dawn 00 hours 10 minutes checking
+@Scheduled(cron="00 30 00 * * ?") //this crontab is repeat every days dawn 00 hours 30 minutes checking
+
+@Scheduled(cron="0 0 2 * * ?") //this crontab is repeat every days dawn 02 hours checking
+@Scheduled(cron="0 0 7 * * ?") //this crontab is repeat every days dawn 07 hours checking
+
+@Scheduled(cron="0 0 */4 * * ?") //this crontab is repeat every days every 04 hours checking
+@Scheduled(cron="0 0 */8 * * ?") //this crontab is repeat every days every 08 hours checking
+
+@Scheduled(cron="0 2 * * * ?") //this crontab is repeat every days every o'clock 02 minutes checking
+@Scheduled(cron="0 15 * * * ?") //this crontab is repeat every days every o'clock 15 minutes checking
+
+@Scheduled(cron="0 30 01 * * ?") //this crontab is repeat every days dawn 01 hours 30 minutes checking
+@Scheduled(cron="0 30 02 * * ?") //this crontab is repeat every days dawn 02 hours 30 minutes checking
+
