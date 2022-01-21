@@ -1,5 +1,3 @@
-package com.entropykorea.biztalkmng.config.security;
-
 import com.entropykorea.biztalkmng.config.manage.SenderProfileManager;
 import com.entropykorea.biztalkmng.service.mapper.BizTalkMngMapper;
 import com.entropykorea.biztalkmng.service.vo.LoginVo;
