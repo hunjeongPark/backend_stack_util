@@ -8,8 +8,8 @@ public ResponseEntity<String> statusCheck() throws Exception {
 @RequestMapping(value = "/middleServerStatusCheck", method = RequestMethod.GET)
 public @ResponseBody
 String middleServerStatusCheck(HttpServletRequest req) throws Exception {
-  //Url check this formatting url checking
-  String url = "https://www.naver.com";
+  //Url check Call that statusCheck API port/RequestMapping/statusCheck ....
+  String url = "localhost:[port]/[RequestMapping]/statusCheck"; 
   String status = "";
   try {
     HttpResponse<JsonNode> response = Unirest
