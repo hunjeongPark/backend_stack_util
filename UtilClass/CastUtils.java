@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2021, Mobile Entropy. All rights reserved.
- */
-package com.entropykorea.biztalkmng.util;
-
 import java.security.MessageDigest;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +12,7 @@ import org.springframework.util.MultiValueMap;
  * 형변환 시 추가적인 처리가 필요한 부분들에 대한 유틸.
  * </pre>
  * 
- * @author seyoungHwang
+ * @author hunjeongPark
  * @since 1.0-SNAPSHOT
  */
 @Component
@@ -49,7 +44,7 @@ public class CastUtils {
 	/**
 	 * Map을 x-www-form-urlencoded 형식에 맞춘 URL String으로 변경
 	 * 
-	 * @author seyoungHwang
+	 * @author hunjeongPark
 	 * @param params Map
 	 * @return a=123&b=23&... 형식의 URL String
 	 */
@@ -66,7 +61,7 @@ public class CastUtils {
 	/**
 	 * Map을 MultiValueMap으로 변경.
 	 * 이 때 null 또는 empty인 항목은 제외.
-	 * @author seyoungHwang
+	 * @author hunjeongPark
 	 * @param params MultiValueMap으로 변경할 Map
 	 * @return null 또는 empty값이 없는 MultiValueMap
 	 */
@@ -83,7 +78,7 @@ public class CastUtils {
 	
 	/**
 	 * MultiValueMap을 null이나 empty인 항목이 없는 MultiValueMap으로 변경.
-	 * @author seyoungHwang
+	 * @author hunjeongPark
 	 * @param params MultiValueMap
 	 * @return null 또는 empty값이 없는 MultiValueMap
 	 */
