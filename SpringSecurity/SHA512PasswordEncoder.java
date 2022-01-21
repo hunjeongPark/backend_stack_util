@@ -1,5 +1,3 @@
-package com.entropykorea.biztalkmng.config.security;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
