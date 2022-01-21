@@ -1,10 +1,10 @@
-- CallBack Server Http Status Check (200, 500...) 
+//CallBack Server Http Status Check (200, 500...) 
 @RequestMapping(value = "/statusCheck", method = RequestMethod.GET)
 public ResponseEntity<String> statusCheck() throws Exception {
   return new ResponseEntity<String>(HttpStatus.OK);
 }
 
-- Call Status Check Ex
+//Call Status Check Ex
 @RequestMapping(value = "/middleServerStatusCheck", method = RequestMethod.GET)
 public @ResponseBody
 String middleServerStatusCheck(HttpServletRequest req) throws Exception {
