@@ -24,6 +24,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/chk","/static/**","/ajax/middleServerStatusCheckEmail").permitAll()    // LoadBalancer Chk
 //                    .antMatchers("/view/alim_summary","/view/manage_user","/view/manage_clients").hasAuthority("ROLE_ADMIN") //this auth contacted this Viewer
                     .antMatchers("/view/manage_user","/view/manage_clients").hasAuthority("ROLE_ADMIN")
+                    .antMatchers("/path/**").access("hasIpAddress('[ip]')") //exception this [ip] didn't access module
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
