@@ -7,16 +7,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * 빌러 → 카카오페이 HOST 정보
- * 개발 : https://sandbox-billgates-gw.kakao.com
- * 운영 : https://billgates-gw.kakao.com
- * 청구서 API 1.1.0 기준
- * ex) 청구서 해지시 호출 URI : https://sandbox-billgates-gw.kakao.com/external/v2/{biller_code}/user/delete
- * API 0.7 기준 URL 패턴 : http://gateway-ip/kakao
- * 
- * kakao URL Connect Class
- * */
 public class UrlConnection {
 	
 	URL searchUrl				= null;
