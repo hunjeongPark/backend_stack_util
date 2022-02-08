@@ -1,0 +1,16 @@
+public static void writeLog(String mod,String str) {
+		java.text.SimpleDateFormat formatterLogTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		java.text.SimpleDateFormat formatterLog = new java.text.SimpleDateFormat("yyyyMMdd");
+
+		try {
+			String sendFileFullPath=kakaoConfig.logDir+"inout_"+ formatterLog.format(new java.util.Date())+".log";
+			BufferedWriter jsonOutFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sendFileFullPath,true),"UTF-8"));
+			jsonOutFile.append(formatterLogTime.format(new java.util.Date())+"["+ mod + "]" +str+"\n");
+			jsonOutFile.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("ERROR:\n "+formatterLogTime.format(new java.util.Date())+"["+mod+"]"+str);
+		}
+		
+	}
