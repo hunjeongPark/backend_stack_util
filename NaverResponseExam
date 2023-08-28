@@ -1,0 +1,23 @@
+1. 사용자조회 
+
+//예) Response_이용자 조회 성공 시 n건 혹은 단건
+{
+  "api_name":"np_cust", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"OK", 
+  "message":"성공",
+  "results":[
+    {user_num_key=1234567890, user_name=홍길동, addr=서울시 마포구 독막로 267 201동 1004호, pay_noti_mthd=10, pay_mthd=10}, 
+    {user_num_key=1234567890, user_name=홍길동, addr=서울시 마포구 독막로 267 209동 707호, pay_mthd=10}
+  ]
+}
+
+//예) Response_이용자 조회 실패 시
+{
+  "api_name":"np_cust", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"E101", 
+  "message":"존재하지 않는 고객입니다."
+}
+
+2. 청구서 신청
