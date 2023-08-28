@@ -21,3 +21,261 @@
 }
 
 2. 청구서 신청
+//예) Response_청구서 신청 성공 시
+{
+  "api_name":"np_join", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"OK", 
+  "message":"성공",
+  "data":[
+    {user_num_key=1234567890, year_month=202308, pay_noti_mthd=10, tran_date=202308}
+  ]
+}
+
+//예) Response_청구서 신청 실패 시
+{
+  "api_name":"np_join", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"E103", 
+  "message":"법인 고객입니다."
+}
+//예) Response_청구서 신청 기가입된 고객이 재 가입 시도 시
+{
+  "api_name":"np_join", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"E111", 
+  "message":"이미 고지서신청이 완료된 고객입니다.",
+  "data":[
+    {tran_date=202308}
+  ]
+}
+
+3. 청구서 해지
+//예) Response_청구서 해지 성공 시
+{
+  "api_name":"np_release", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"OK", 
+  "message":"성공",
+  "data":[
+    {user_num_key=1234567890}
+  ]
+}
+
+//예) Response_청구서 해지 실패 시
+{
+  "api_name":"np_release", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"E201", 
+  "message":"이미 고지서 해지된 고객입니다."
+}
+
+4. 청구서 조회
+//예) Response_청구서 조회 성공 시
+{
+  "api_name":"np_notice", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"OK", 
+  "message":"성공",
+  "data":[
+    {
+      title=2023년8월 가스요금, user_num_key=1234567890, year_month=202308, user_name=고객명, 
+      addr=서울시 마포구 독막로 433 201동 101호 (대흥동 마포자이아파트), expire_date=20230910, amount=45000,
+      last_month_amt=44770, amt_text=지난달 대비 700원 감소, pay_mthd=4, autopay_scheduled_date=20230825, pay_st=2,
+      "details":[
+      {
+    			"item_type": "GRAPH",
+    			"title": "최근 1년간 사용금액 추이",
+    			"unit_name": "원/월",
+    			"elements": [
+    				{
+    					"x": "8",
+    					"y": 0
+    				},
+    				{
+    					"x": "9",
+    					"y": 17110
+    				},
+    				{
+    					"x": "10",
+    					"y": 5180
+    				},
+    				{
+    					"x": "11",
+    					"y": 35230
+    				},
+    				{
+    					"x": "12",
+    					"y": 58840
+    				},
+    				{
+    					"x": "1",
+    					"y": 52180
+    				},
+    				{
+    					"x": "2",
+    					"y": 63970
+    				},
+    				{
+    					"x": "3",
+    					"y": 78670
+    				},
+    				{
+    					"x": "4",
+    					"y": 62210
+    				},
+    				{
+    					"x": "5",
+    					"y": 53810
+    				},
+    				{
+    					"x": "6",
+    					"y": 33820
+    				},
+    				{
+    					"x": "7",
+    					"y": 25450
+    				},
+    				{
+    					"x": "8",
+    					"y": 18690
+    				}
+    			]
+    		},
+    		{
+    			"item_type": "KEY_VALUE",
+    			"title": "청구정보",
+    			"elements": [
+    				{
+    					"level": 1,
+    					"key": "지로번호",
+    					"value": "1234567"
+    				},
+    				{
+    					"level": 1,
+    					"key": "계량기번호",
+    					"value": "0000000000001"
+    				}
+    			]
+    		},
+    		{
+    			"item_type": "KEY_VALUE",
+    			"title": "입금전용계좌번호",
+    			"elements": [
+    				{
+    					"level": 1,
+    					"key": "신한은행",
+    					"value": "12341234123412"
+    				}
+    			]
+    		},
+    		{
+    			"item_type": "KEY_VALUE",
+    			"title": "요금내역",
+    			"elements": [
+    				{
+    					"level": 1,
+    					"key": "당월요금",
+    					"value": "45,000원"
+    				},
+    				{
+    					"level": 1,
+    					"key": "당월사용량",
+    					"value": "1,511㎥"
+    				},
+    				{
+    					"level": 1,
+    					"key": "사용기간",
+    					"value": "2023년08월01일 ~ 2023년08월31일"
+    				}
+    			]
+    		},
+    		{
+    			"title": "안내사항",
+    			"item_type": "TEXT",
+    			"description": "",
+    			"elements": [
+    				"공지사항 별도 안내"
+    			]
+    		}]
+    }]
+}
+
+
+5. 청구서 해지(이용기관)
+//예) Response_청구서 해지 성공 시
+{
+  "api_name":"np_cg_release", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"OK", 
+  "message":"성공"
+}
+
+//예) Response_청구서 해지 실패 시
+{
+  "api_name":"np_cg_release", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"E201", 
+  "message":"이미 고지서 해지된 고객입니다."
+}
+
+6. 납부내역 전달
+//예) Response_납부내역 전달 성공 시
+{
+  "api_name":"np_pay", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"OK", 
+  "message":"성공",
+  "data":[
+    {user_num_key=1234567890, year_month=202308, paymentId=20230828NP1040596348}
+  ]
+}
+
+//예) Response_납부내역 전달 실패 시
+{
+  "api_name":"np_pay", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"E779", 
+  "message":"기타 사유로 납부불가."
+}
+
+7. 정기고지서 발송
+//예) Request_정기고지서 발송
+{
+  "api_name":"np_rg_notice", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"OK", 
+  "message":"성공",
+  "data":[
+    {user_num_key=1234567890, year_month=202308, paymentId=20230828NP1040596348}
+  ]
+}
+
+//예) Response_납부내역 전달 실패 시
+{
+  "api_name":"np_rg_notice", 
+  "trans_dttm":"20230828103042767", 
+  "res_code":"E779", 
+  "message":"기타 사유로 납부불가."
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
