@@ -141,9 +141,10 @@ Spring은 아래와같이 5가지의 속성을 지원합니다.
 
 ## Project 내 Spring Transaction 사용 예시
 
-1. Transaction의 서비스 단위
-    - Transaction을 서비스 단위로 속성을 지정하여 사용한 예시입니다.
-    - 대부분의 Transaction 속성 설정은 Propagation REQUIRED면 충분합니다.
+<strong>1. Transaction의 서비스 단위</strong>
+* Transaction을 서비스 단위로 속성을 지정하여 사용한 예시입니다.
+* 대부분의 Transaction 속성 설정은 Propagation REQUIRED면 충분합니다.
+
 ```java
 
 	/**
@@ -195,13 +196,13 @@ Spring은 아래와같이 5가지의 속성을 지원합니다.
 	}
 ```
 
-2. Transaction의 Service내 개별 Method 단위 지정
-    - Transaction의 서비스 내 개별 Method 단위로 속성을 지정하여 사용한 예시입니다.
-    - Method 단위로 Transactional Annotation을 이용하여 적용되었지만 Propagation REQUIRED 속성 지정으로 상위 Method에서 이미 시작된 Transactio에 참여하게 되어 개별 작업 단위로 rollback이 일어나지는 않습니다.
-![Transaction](./images/Transaction4.png)
+<strong>2. Transaction의 Service내 개별 Method 단위 지정</strong>
+* Transaction의 서비스 내 개별 Method 단위로 속성을 지정하여 사용한 예시입니다.
+* Method 단위로 Transactional Annotation을 이용하여 적용되었지만 Propagation REQUIRED 속성 지정으로 상위 Method에서 이미 시작된 Transactio에 참여하게 되어 개별 작업 단위로 rollback이 일어나지는 않습니다.
+![Transaction](./images/Transaction2.png)
 
-3. Transaction의 Service내 대상에서 예외 무시 사례
-    - Transaction의 서비스 내 특정 행동에 대해서 롤백을 시키지 않도록 제외시키기 위해 noRollbackFor를 사용하는 예시입니다.
+<strong>3. Transaction의 Service내 대상에서 예외 무시 예시</strong>
+* Transaction의 서비스 내 특정 행동에 대해서 롤백을 시키지 않도록 제외시키기 위해 noRollbackFor를 사용하는 예시입니다.
 ```java
 	@Transactional(value="transactionManager", propagation= Propagation.REQUIRED, noRollbackFor=Exception.class)
 	public String deleteTest(String code, int seq) {
@@ -217,8 +218,8 @@ Spring은 아래와같이 5가지의 속성을 지원합니다.
     
 ```
 
-4. Transactional과 try-catch
-    - Transactional을 선언하였지만, try-catch 구문의 사용으로 모든 예외(예외의 최상위 계층인 Exception을 catch함)를 처리하도록 정의 했기 때문에 발생하는 모든 예외는 catch블록에서 처리가 됩니다. try-catch를 통해 예외처리를 했을 경우에는 rollbackFor을 설정하더라도 적용이 되지 않기 때문에 catch내에서 강제로 throw를 해주어야 롤백이 적용됩니다.
+<strong>4. Transactional과 try-catch</strong>
+* Transactional을 선언하였지만, try-catch 구문의 사용으로 모든 예외(예외의 최상위 계층인 Exception을 catch함)를 처리하도록 정의 했기 때문에 발생하는 모든 예외는 catch블록에서 처리가 됩니다. try-catch를 통해 예외처리를 했을 경우에는 rollbackFor을 설정하더라도 적용이 되지 않기 때문에 catch내에서 강제로 throw를 해주어야 롤백이 적용됩니다.
 ```java
     /**
     * 알림톡 SMS 등록
@@ -262,5 +263,199 @@ Spring은 아래와같이 5가지의 속성을 지원합니다.
         return retCnt;
     }
 ```
+
+<strong>5. Transaction이 선언된 서비스내에 특정 메소드에 의해 Transaction이 발생하지 않는 경우</strong>
+
+```java
+    /**
+    * 소득공제용 현금영수증 신청
+    * @param param
+    */
+    @Transactional(value="transactionManager", propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
+    public PaymentCashReceiptMessageResVo savePaymentCashReceiptRegister(
+            CommonHeaderReqVo session, List<PaymentCashReceiptRqReqVo> list, HttpServletRequest request, String resCode, String targetUse) {
+        PaymentCashReceiptMessageResVo resVo = new PaymentCashReceiptMessageResVo();
+
+        int successCount = 0;
+        int failCount = 0;
+
+        for (PaymentCashReceiptRqReqVo reqvo : list) {
+        boolean isTargetValidation = false;
+
+            //... 소스중략 ...
+                    
+            //해당 위치에서 호출되는 특정 메소드의 호출이 paymentCashReceiptMessageResVo의 서비스 로직에서
+            //아래 호출되는 bizAilmTalkGwService.sendAlimTalk의 로직때문에 롤백이 되지 않도록 Transaction에서 제외외
+            String returnStr = bizAlimTalkGwService.sendAlimTalk(alimSmsSendInfRq);
+
+            if(logger.isDebugEnabled())logger.debug("returnStr : {}", returnStr);
+
+            successCount++;
+        
+
+            if (successCount > 0 && failCount == 0) {
+                resVo.setMessage(MessageFormat.format("현금영수증 발행 {0}건 완료 하였습니다.",successCount));
+            } else {
+                resVo.setMessage(MessageFormat.format("현금영수증 발행 {0}건 완료,{1}건 실패 하였습니다.(문의:시스템개발팀)",successCount, failCount));
+            }
+        }
+        return resVo;
+    }
+```
+
+- Transaction이 진행 중이라면 진행 중인 Transaction에 영향을 미치지 않도록 선언된 메소드 sendAlimTalk
+propagation=Propagation.NOT_SUPPORTED로 인하여 진행중인 Transaction에 영향을 끼치지 않습니다.
+
+```java
+  /**
+   * 저장_알림톡_발송_메시지
+   * @param reqAlimSms
+   * @return
+   */
+  @Transactional(value="transactionSendDbManager", propagation= Propagation.NOT_SUPPORTED, rollbackFor=Exception.class)
+  public String sendAlimTalk(SendAlimTalkInfoRq reqAlimTalk) {
+    String retCnt = "";
+    
+    try {
+      
+      TeamRs teamRs =  new TeamRs();
+      
+      teamRs.setAlimtalkNumber(reqAlimTalk.getSmsSndNum());
+      
+      int checkCnt = bizTeamMapper.GW_EMP_ALIMTALK_CHECK(teamRs);
+      
+      if ( checkCnt > 0 ) {
+        retCnt = bizAlimTalkGwMapper.저장_알림톡_발송_메시지(reqAlimTalk);
+      } else {
+        logger.error("알림톡 대표번호 오류(템플릿 코드 : "+ reqAlimTalk.getTmplCd() +", 번호 : " + reqAlimTalk.getSmsSndNum() +")");
+      }
+        
+    }catch(Exception ex) {
+      if(logger.isErrorEnabled())logger.error("저장_알림톡_발송_메시지", ex);
+    }
+    
+    return retCnt;
+  }
+}
+```
+
+<strong>6. Transaction이 선언되지 않은 서비스 로직 내 특정 로직에서만 Transaction이 걸리는 경우</strong>
+
+* Transaction이 걸리지 않은 메소드에 한하여 주의사항
+@Transactional이 선언되지 않은 메소드 내부 로직에서 개별 메소드에서 @Transactional을 사용하고자 할 경우 동일한 Class(빈) 내 @Transactional이 선언된 메소드를 호출해도 Transaction이 걸리지 않는다. 반드시 다른 클래스에서 메소드를 호출해야만 한다.
+
+<strong>호출되지 않는 이유</strong>
+* 참조링크 : https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+* 트랜잭션은 프록시를 통해 들어오는 외부 메소드 호출만을 인터셉트 하기 때문에, Spring AOP는 외부 메소드의 호출만을 인터셉트 하여 동일 Class에서 선언된 메소드 끼리는 프록시를 인터셉트 하지 못하는 것입니다.
+
+- @Transactional이 선언되지 않은 메소드지만, 회원정보의 재직 정보를 변경 업데이트 처리시 개별 회원정보에서 Exception이 발생 시 rollback을 합니다.
+
+```java
+@Service
+@RequiredArgsConstructor
+public class TransactionTestEmployeeGwService {
+
+    /**
+     *  Value object mapper
+     */
+    private final ModelMapper modelMapper;
+
+    private final BizEmployeeCommonGwMapper bizEmployeeCommonGwMapper;
+
+    private final TransactionTestEmployeeGwExternalService transactionTestEmployeeGwExternalService;
+
+    public String transactionalTestEmployeeInfo(String empCode) throws Exception {
+
+        //Work_type을 바꾸었을때, 정상적으로 바꾸는것과 정상적으로 바꾸지 못한 데이터에 한하여 테스트를 진행함.
+        //select * from EMP_MASTER_damo where work_type = '5'
+        /*
+        * 2007051
+        * 2007053
+        * 2007054
+        * 2007055
+        * 2007058
+        * emp code가 이하 5개로만 test 진행됨.
+        * */
+        Map<String, Object> testEmpCodeList = Map.of(
+                "empCode0", "2007051"
+                , "empCode1", "2007053"
+                , "empCode2", "2007054"
+                , "empCode3", "2007055"
+                , "empCode4", "2007058"
+        );
+
+        for (Map.Entry<String, Object> entry : testEmpCodeList.entrySet()) {
+            EmployeeResVo employeeResVo = getEmployeeByEmployeeCode(String.valueOf(entry.getValue()));
+
+            if (empCode.equals("2024096")) {
+                employeeResVo.setWorkType(WorkTypeEnum.퇴사);
+                transactionTestEmployeeGwExternalService.updateEmploy(employeeResVo, empCode);
+
+                continue;
+            }
+
+            if(employeeResVo.getWorkType().getCode() == 5) {
+                // 퇴사자의 정보에 한해서 트랜잭션을  일으키고, 롤백을 진행
+                employeeResVo.setWorkType(WorkTypeEnum.재직);
+                transactionTestEmployeeGwExternalService.updateEmploy(employeeResVo, empCode);
+            }
+
+        }
+
+        return "트랜잭션 테스트 성공";
+    }
+
+    public EmployeeResVo getEmployeeByEmployeeCode(String empCode) {
+        EmployeeResVo resVo = new EmployeeResVo();
+        EmployeeRs employeeRs = bizEmployeeCommonGwMapper.SELECT_EMP_BY_EMP_CODE(empCode);
+        if (!ObjectUtils.isEmpty(employeeRs)) {
+            resVo = modelMapper.map(employeeRs, EmployeeResVo.class);
+        }
+        return resVo;
+    }
+
+}
+```
+
+- 외부 클래스에서 호출되는 updateEmploy가 개별 작업에 @Transactional을 진행
+
+```java
+@Service
+@RequiredArgsConstructor
+public class TransactionTestEmployeeGwExternalService {
+
+
+    private final ModelMapper modelMapper;
+
+    private final BizEmployeeCommonGwMapper bizEmployeeCommonGwMapper;
+
+    /**
+     * TransactionTest 외부 메소드
+     * @param req
+     */
+    @Transactional(value="transactionManager", propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
+    public void updateEmploy(EmployeeResVo req, String empCode) throws Exception {
+        EmployeeRs rs = modelMapper.map(req, EmployeeRs.class);
+        bizEmployeeCommonGwMapper.함수_임직원정보업데이트(rs);
+
+        if (empCode.equals("2024096")) return;
+
+        if(req.getPosType().getCode() == 2) {
+            //계장의 경우가 들어가면 rollback을 시킴.
+            throw new Exception();
+        }
+    }
+}
+```
+
+* 진행내역 
+![Transaction](./images/Transaction3.png)
+
+
+
+
+
+
+
 
 
