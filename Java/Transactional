@@ -451,7 +451,38 @@ public class TransactionTestEmployeeGwExternalService {
 * 진행내역 
 ![Transaction](./images/Transaction3.png)
 
+<strong>6.1. 내부 Bean 에서 Transactional을 받아 쓰는 방법</strong>
 
+* 외부 Bean에서 선언된 Method를 가져다가 쓰는 방법이 아닌, 내부 Bean에 선언된 Method에서 Annotation이 붙지 않았더라도
+@Transactional을 이용할 수 있는 방법이 있습니다. Self injection을 통해 주입받는 방법입니다. 단, Self injection은 그냥 선언 시에 순환참조 에러를 발생 시키기 때문에 Proxy Mode를 통해서 이를 해결하여 사용해야만 합니다.
+
+* 생성자를 단순히 Self로 생성하였을 때 발생하는 에러
+
+```
+Relying upon circular references is discouraged and they are prohibited by default. Update your application to remove the
+dependency cycle between beans. As a last resort, it may be possible to break the cycle automatically by setting 
+spring.main.allow-circular-references to true.
+```
+
+* Proxy Mode 를 사용하여 내클래스를 상속받은 Proxy 객체를 만들어 주입하는 방법 (Bean의 의존관계 주입 시, Proxy 객체가 주입되는 것)
+* Project 내부 사용 사례
+```java
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON, proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class ResManagerRmService {
+	
+    private final ResManagerRmService self;
+
+    //... 코드 중략 ...
+
+    resultCode = self.resReserveInfoSaveByExcel(session, req);
+
+    // 내부 Method resReserveInfoSaveByExcel
+
+     @Transactional(value = "transactionManager", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, ServiceRuntimeVgtException.class}) 
+	  public int resReserveInfoSaveByExcel(CommonHeaderReqVo session, PackageReserveExcelSaveReqVo param) { 
+
+    // ...
+```
 
 
 
